@@ -1,50 +1,26 @@
-# React + TypeScript + Vite
+# Trello Clon
+### Technologies
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<div style="display:flex; gap:2.5px">
+  <img src="https://img.shields.io/badge/NPM-%23000000?style=for-the-badge&logo=npm&logoColor=white" alt="NPM" style="width: 80px; height: 20px"/>
+  <img src="https://img.shields.io/badge/Vite-%232e3440?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" width="100" style="width: 80px; height: 20px"/>
+  <img src="https://img.shields.io/badge/TypeScript-%232b7489?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" width="100" style="width: 120px; height: 20px"/>
+  <img src="https://img.shields.io/badge/React-%2320232a?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" width="100" style="width: 100px; height: 20px"/>
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" width="100" style="width: 140px; height: 20px"/>
+</div>
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Requirements
+Node v20.
+### Installation
+##### 1) Clone the project.
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Git clone https://github.com/CarSeP/Url-Shortener.git
+```
+##### 2) Install dependencies.
+```
+npm i
+```
+##### 3) Run the project.
+```
+npm run dev
 ```

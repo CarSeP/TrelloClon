@@ -1,5 +1,3 @@
-import type React from "react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,28 +9,44 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { getDate } from "@/lib/formattedDate";
+import { useBoardStore } from "@/store/boardStore";
 
 interface Props {
+  columnId: number;
   open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onAdd: (title: string, description: string) => void;
+  onClose: () => void;
 }
 
-export function AddCardDialog({ open, onOpenChange, onAdd }: Props) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+export function AddCardDialog({ columnId, open, onClose }: Props) {
+  const { addCard } = useBoardStore((state) => state);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    if (title.trim()) {
-      onAdd(title, description);
-      setTitle("");
-      setDescription("");
+
+    const title = e.target.title.value.trim();
+    if (!title) {
+      e.target.title.focus();
+      return;
     }
+
+    const description = e.target.description.value.trim();
+    if (!description) {
+      e.target.description.focus();
+      return;
+    }
+
+    addCard(columnId, {
+      id: Date.now(),
+      title,
+      description,
+      date: getDate()
+    })
+    onClose();
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -43,8 +57,7 @@ export function AddCardDialog({ open, onOpenChange, onAdd }: Props) {
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                name="title"
                 placeholder="Enter card title"
                 required
               />
@@ -53,19 +66,14 @@ export function AddCardDialog({ open, onOpenChange, onAdd }: Props) {
               <Label htmlFor="description">Description</Label>
               <Textarea
                 id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                name="description"
                 placeholder="Enter card description"
                 rows={3}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit">Add Card</Button>

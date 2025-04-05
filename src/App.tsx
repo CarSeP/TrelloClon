@@ -1,15 +1,14 @@
 import { useEffect } from "react";
-import { Header } from "./components/Header";
-import { Board } from "./components/Board";
-import { useBoardStore } from "./store/boardStore";
-
-const KeyLocalStorage = "dataItems";
+import { Header } from "@/components/Header";
+import { Board } from "@/components/Board";
+import { useBoardStore } from "@/store/boardStore";
+import { env } from "@/config";
 
 function App() {
   const { board, setBoard } = useBoardStore((store) => store);
 
   const getData = () => {
-    const data = localStorage.getItem(KeyLocalStorage);
+    const data = localStorage.getItem(env.key);
     if (data) setBoard(JSON.parse(data));
   };
 

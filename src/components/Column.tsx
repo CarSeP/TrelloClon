@@ -9,14 +9,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ColumnType } from "@/interfaces/board.model";
 import { AddCardDialog } from "./AddCardDialog";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cardsConfig } from "@/lib/sortableConfig";
+import Sortable from "sortablejs";
+import { useBoardStore } from "@/store/boardStore";
 
 interface Props {
   column: ColumnType;
+  index: string;
 }
 
-export function Column({ column }: Props) {
+export function Column({ column, index }: Props) {
   const [open, setOpen] = useState(false);
+  const cardRef = useRef(null);
+
+  const { moveCard } = useBoardStore((state) => state);
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+    new Sortable(cardRef.current, cardsConfig(moveCard));
+  });
 
   return (
     <div className="flex h-full w-72 shrink-0 flex-col rounded-lg border bg-muted/20">
@@ -49,7 +61,7 @@ export function Column({ column }: Props) {
         </div>
       </div>
       <div className="flex-1 overflow-auto p-2">
-        <div className="space-y-2">
+        <div className="space-y-2 min-h-5" ref={cardRef} id={index}>
           {column.cards.map((card) => (
             <TaskCard key={card.id} card={card} />
           ))}
@@ -65,7 +77,11 @@ export function Column({ column }: Props) {
           Add a card
         </Button>
       </div>
-      <AddCardDialog columnId={column.id} open={open} onClose={() => setOpen(false)} />
+      <AddCardDialog
+        columnId={column.id}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </div>
   );
 }

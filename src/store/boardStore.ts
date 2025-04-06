@@ -8,6 +8,13 @@ interface boardInterface {
   setBoard: (board: BoardType) => void;
   addColumn: (column: ColumnType) => void;
   addCard: (columnId: number, card: CardType) => void;
+  moveColumn: (columnIndex: number, columnNewIndex: number) => void;
+  moveCard: (
+    columnIndex: number,
+    columnNewIndex: number,
+    cardIndex: number,
+    cardNewIndex: number
+  ) => void;
 }
 
 const boardDefaulData: BoardType = {
@@ -40,4 +47,24 @@ export const useBoardStore = create<boardInterface>((set) => ({
       });
       return { board: safeBoard({ ...state.board, columns }) };
     }),
+  moveColumn: (columnIndex: number, columnNewIndex: number) =>
+    set((state) => {
+      let columns = state.board.columns;
+      const column = columns.splice(columnIndex, 1);
+      columns.splice(columnNewIndex, 0, column[0]);
+      return { board: safeBoard({ ...state.board, columns }) };
+    }),
+  moveCard: (
+    columnIndex: number,
+    columnNewIndex: number,
+    cardIndex: number,
+    cardNewIndex: number
+  ) => {
+    set((state) => {
+      let columns = state.board.columns;
+      const card = columns[columnIndex].cards.splice(cardIndex, 1);
+      columns[columnNewIndex].cards.splice(cardNewIndex, 0, card[0]);
+      return { board: safeBoard({ ...state.board, columns }) };
+    })
+  },
 }));

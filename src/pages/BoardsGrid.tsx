@@ -1,18 +1,22 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
-import { Plus } from "lucide-react";
 import { env } from "@/config";
 import { useEffect, useState } from "react";
 import { BoardType } from "@/interfaces/board.model";
 import { useNavigate } from "react-router-dom";
 import { AddBoardDialog } from "@/components/AddBoardDialog";
 import { useError } from "@/customhooks/useError";
+import { AddBoard } from "@/components/AddBoard";
+import { BoardCell } from "@/components/BoardCell";
 
 export function BoardsGrid() {
 	const navigate = useNavigate();
 	const { setError } = useError();
 	const [boards, setBoards] = useState<BoardType[]>([]);
 	const [open, setOpen] = useState(false);
+
+	const onNavigate = (id: string) => {
+		navigate(id);
+	};
 
 	const fetchData = async () => {
 		try {
@@ -39,29 +43,15 @@ export function BoardsGrid() {
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 				{boards.map((board) => (
-					<Card
-						onClick={() => {
-							navigate(board.id);
-						}}
-						key={board.id}
-						className="hover:shadow-md transition-shadow duration-200 cursor-pointer min-h-[140px] flex items-center justify-center"
-					>
-						<CardTitle className="text-lg text-center">{board.title}</CardTitle>
-					</Card>
+					<BoardCell
+						title={board.title}
+						id={board.id}
+						onNavigate={onNavigate}
+					/>
 				))}
 
-				<Card className="hover:shadow-md p-0 transition-shadow duration-200 overflow-hidden border-dashed border-2 hover:border-primary/50">
-					<Button
-						onClick={() => {
-							setOpen(true);
-						}}
-						variant="ghost"
-						className="w-full h-full cursor-pointer min-h-[140px] flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-primary"
-					>
-						<Plus className="h-8 w-8" />
-						<span className="text-lg font-medium">Add board</span>
-					</Button>
-				</Card>
+				<AddBoard onOpen={() => setOpen(true)} />
+
 				<AddBoardDialog
 					open={open}
 					onClose={() => setOpen(false)}

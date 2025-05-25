@@ -1,5 +1,5 @@
 export interface BoardType {
-  id: number;
+  id: string;
   title: string;
   columns: ColumnType[];
 }

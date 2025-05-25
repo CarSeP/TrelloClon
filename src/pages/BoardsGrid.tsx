@@ -6,17 +6,22 @@ import { useEffect, useState } from "react";
 import { BoardType } from "@/interfaces/board.model";
 import { useNavigate } from "react-router-dom";
 import { AddBoardDialog } from "@/components/AddBoardDialog";
+import { useError } from "@/customhooks/useError";
 
 export function BoardsGrid() {
 	const navigate = useNavigate();
-
+	const { setError } = useError();
 	const [boards, setBoards] = useState<BoardType[]>([]);
 	const [open, setOpen] = useState(false);
 
 	const fetchData = async () => {
-		const response = await fetch(env.backendURL + "/api/board");
-		const data = await response.json();
-		setBoards(data);
+		try {
+			const response = await fetch(env.backendURL + "/api/board");
+			const data = await response.json();
+			setBoards(data);
+		} catch {
+			setError(true);
+		}
 	};
 
 	useEffect(() => {

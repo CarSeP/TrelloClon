@@ -1,17 +1,26 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { BoardsGrid } from "./pages/BoardsGrid";
 import { BoardView } from "./pages/BoardView";
-import {Login} from "./pages/Login";
+import { Login } from "./pages/Login";
+import { createContext, useState } from "react";
+import { ErrorContextType } from "./interfaces/errorContext.model";
+import { ErrorDialog } from "./components/ErrorDialog";
+
+export const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
 
 function App() {
+	const [error, setError] = useState(false);
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Login />} />
-				<Route path="/board" element={<BoardsGrid />} />
-				<Route path="/board/:id" element={<BoardView />} />
-			</Routes>
-		</BrowserRouter>
+		<ErrorContext.Provider value={{ error, setError }}>
+			<ErrorDialog />
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Login />} />
+					<Route path="/board" element={<BoardsGrid />} />
+					<Route path="/board/:id" element={<BoardView />} />
+				</Routes>
+			</BrowserRouter>
+		</ErrorContext.Provider>
 	);
 }
 

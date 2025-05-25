@@ -9,6 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { env } from "@/config";
+import { useError } from "@/customhooks/useError";
 
 interface Props {
 	open: boolean;
@@ -17,6 +18,8 @@ interface Props {
 }
 
 export function AddBoardDialog({ open, onClose, reload }: Props) {
+	const { setError } = useError();
+
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
 		e.target.title.focus();
@@ -24,16 +27,20 @@ export function AddBoardDialog({ open, onClose, reload }: Props) {
 
 		if (!title) return;
 
-		await fetch(env.backendURL + "/api/board", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ title }),
-		});
+		try {
+			await fetch(env.backendURL + "/api/board", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ title }),
+			});
 
-		reload();
-		onClose();
+			reload();
+			onClose();
+		} catch {
+			setError(true);
+		}
 	};
 
 	return (

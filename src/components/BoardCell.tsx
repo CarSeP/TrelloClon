@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DeleteBoardDialog } from "./DeleteBoardDialog";
 import { useState } from "react";
+import { EditBoardDialog } from "./EditBoardDialog";
 
 interface Props {
 	title: string;
@@ -16,8 +17,13 @@ interface Props {
 	reload: () => void;
 }
 
+enum Dialog {
+	deleteBoard,
+	editBoard,
+}
+
 export function BoardCell({ title, id, onNavigate, reload }: Props) {
-	const [open, setOpen] = useState(false);
+	const [openDialog, setOpenDialog] = useState<Dialog | null>(null);
 
 	return (
 		<>
@@ -37,14 +43,17 @@ export function BoardCell({ title, id, onNavigate, reload }: Props) {
 							className="cursor-pointer"
 							onClick={(e) => {
 								e.stopPropagation();
-								setOpen(true);
+								setOpenDialog(Dialog.deleteBoard);
 							}}
 						>
 							Delete
 						</DropdownMenuItem>
 						<DropdownMenuItem
 							className="cursor-pointer"
-							onClick={(e) => e.stopPropagation()}
+							onClick={(e) => {
+								e.stopPropagation();
+								setOpenDialog(Dialog.editBoard);
+							}}
 						>
 							Edit
 						</DropdownMenuItem>
@@ -52,8 +61,14 @@ export function BoardCell({ title, id, onNavigate, reload }: Props) {
 				</DropdownMenu>
 			</Card>
 			<DeleteBoardDialog
-				open={open}
-				onClose={() => setOpen(false)}
+				open={openDialog === Dialog.deleteBoard}
+				onClose={() => setOpenDialog(null)}
+				id={id}
+				reload={reload}
+			/>
+			<EditBoardDialog
+				open={openDialog === Dialog.editBoard}
+				onClose={() => setOpenDialog(null)}
 				id={id}
 				reload={reload}
 			/>

@@ -1,4 +1,3 @@
-import { Card, CardTitle } from "@/components/ui/card";
 import { env } from "@/config";
 import { useEffect, useState } from "react";
 import { BoardType } from "@/interfaces/board.model";
@@ -45,8 +44,10 @@ export function BoardsGrid() {
 				{boards.map((board) => (
 					<BoardCell
 						title={board.title}
+						key={board.id}
 						id={board.id}
 						onNavigate={onNavigate}
+						reload={fetchData}
 					/>
 				))}
 

@@ -29,13 +29,15 @@ export function EditBoardDialog({ open, onClose, reload, id }: Props) {
 		if (!title) return;
 
 		try {
-			await fetch(env.backendURL + "/api/board/" + id, {
+			const response = await fetch(env.backendURL + "/api/board/" + id, {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ title }),
 			});
+
+			if (!response.ok) throw new Error("Status: " + response.status);
 
 			reload();
 			onClose();

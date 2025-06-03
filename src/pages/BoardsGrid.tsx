@@ -20,6 +20,9 @@ export function BoardsGrid() {
 	const fetchData = async () => {
 		try {
 			const response = await fetch(env.backendURL + "/api/board");
+
+			if (!response.ok) throw new Error("Status: " + response.status);
+
 			const data = await response.json();
 			setBoards(data);
 		} catch {

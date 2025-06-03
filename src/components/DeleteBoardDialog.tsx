@@ -23,9 +23,11 @@ export function DeleteBoardDialog({ open, onClose, reload, id }: Props) {
 		e.preventDefault();
 
 		try {
-			await fetch(env.backendURL + "/api/board/" + id, {
+			const response = await fetch(env.backendURL + "/api/board/" + id, {
 				method: "DELETE",
 			});
+
+			if (!response.ok) throw new Error("Status: " + response.status);
 
 			reload();
 			onClose();

@@ -5,8 +5,11 @@ import { Login } from "./pages/Login";
 import { createContext, useState } from "react";
 import { ErrorContextType } from "./interfaces/errorContext.model";
 import { ErrorDialog } from "./components/ErrorDialog";
+import { NotFound } from "./pages/NotFound";
 
-export const ErrorContext = createContext<ErrorContextType | undefined>(undefined);
+export const ErrorContext = createContext<ErrorContextType | undefined>(
+	undefined
+);
 
 function App() {
 	const [error, setError] = useState(false);
@@ -18,6 +21,7 @@ function App() {
 					<Route path="/" element={<Login />} />
 					<Route path="/board" element={<BoardsGrid />} />
 					<Route path="/board/:id" element={<BoardView />} />
+					<Route path="*" element={<NotFound />} />
 				</Routes>
 			</BrowserRouter>
 		</ErrorContext.Provider>

@@ -21,7 +21,12 @@ function App() {
 					<Route path="/" element={<Login />} />
 					<Route path="/board" element={<BoardsGrid />} />
 					<Route path="/board/:id" element={<BoardView />} />
-					<Route path="*" element={<NotFound />} />
+					<Route
+						path="*"
+						element={
+							<NotFound title="Sorry, the page you are looking for does not exist or has been moved." />
+						}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</ErrorContext.Provider>

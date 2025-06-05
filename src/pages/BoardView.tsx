@@ -34,7 +34,7 @@ export function BoardView() {
 		getData();
 	}, []);
 
-	if (notFound) return <NotFound />;
+	if (notFound) return <NotFound title="The board you are looking for does not exist or may have been removed."/>;
 
 	return (
 		<div className="flex min-h-screen flex-col">

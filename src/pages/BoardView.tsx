@@ -1,20 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Board } from "@/components/Board";
-import { useBoardStore } from "@/store/boardStore";
 import { env } from "@/config";
+import { useError } from "@/customhooks/useError";
+import { BoardType } from "@/interfaces/board.model";
+import { useParams } from "react-router-dom";
+import { NotFound } from "./NotFound";
 
 export function BoardView() {
-	const { board, setBoard } = useBoardStore((store) => store);
+	const { setError } = useError();
+	const [board, setBoard] = useState<BoardType>();
+	const [notFound, setNotFound] = useState(false);
+	const { id } = useParams();
 
-	const getData = () => {
-		const data = localStorage.getItem(env.key);
-		if (data) setBoard(JSON.parse(data));
+	const getData = async () => {
+		try {
+			const response = await fetch(env.backendURL + "/api/board/" + id);
+
+			if (response.status === 404) {
+				setNotFound(true)
+				return
+			}
+			if (!response.ok) throw new Error("Status: " + response.status);
+
+			const data = await response.json();
+			setBoard(data);
+		} catch {
+			setError(true);
+		}
 	};
 
 	useEffect(() => {
 		getData();
 	}, []);
+
+	if (notFound) return <NotFound />;
 
 	return (
 		<div className="flex min-h-screen flex-col">

@@ -6,12 +6,14 @@ import { AddBoardDialog } from "@/components/AddBoardDialog";
 import { useError } from "@/customhooks/useError";
 import { AddBoard } from "@/components/AddBoard";
 import { BoardCell } from "@/components/BoardCell";
+import { Loader } from "@/components/Loader";
 
 export function BoardsGrid() {
 	const navigate = useNavigate();
 	const { setError } = useError();
 	const [boards, setBoards] = useState<BoardType[]>([]);
 	const [open, setOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const onNavigate = (id: string) => {
 		navigate(id);
@@ -25,6 +27,7 @@ export function BoardsGrid() {
 
 			const data = await response.json();
 			setBoards(data);
+			setIsLoading(false);
 		} catch {
 			setError(true);
 		}
@@ -33,6 +36,8 @@ export function BoardsGrid() {
 	useEffect(() => {
 		fetchData();
 	}, []);
+
+	if (isLoading) return <Loader />;
 
 	return (
 		<div className="container mx-auto p-6">

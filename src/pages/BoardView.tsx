@@ -6,11 +6,13 @@ import { useError } from "@/customhooks/useError";
 import { BoardType } from "@/interfaces/board.model";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
+import { Loader } from "@/components/Loader";
 
 export function BoardView() {
 	const { setError } = useError();
 	const [board, setBoard] = useState<BoardType>();
 	const [notFound, setNotFound] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const { id } = useParams();
 
 	const getData = async () => {
@@ -18,13 +20,14 @@ export function BoardView() {
 			const response = await fetch(env.backendURL + "/api/board/" + id);
 
 			if (response.status === 404) {
-				setNotFound(true)
-				return
+				setNotFound(true);
+				return;
 			}
 			if (!response.ok) throw new Error("Status: " + response.status);
 
 			const data = await response.json();
 			setBoard(data);
+			setIsLoading(false);
 		} catch {
 			setError(true);
 		}
@@ -34,7 +37,12 @@ export function BoardView() {
 		getData();
 	}, []);
 
-	if (notFound) return <NotFound title="The board you are looking for does not exist or may have been removed."/>;
+	if (isLoading) return <Loader />;
+
+	if (notFound)
+		return (
+			<NotFound title="The board you are looking for does not exist or may have been removed." />
+		);
 
 	return (
 		<div className="flex min-h-screen flex-col">

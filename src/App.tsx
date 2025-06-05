@@ -14,7 +14,7 @@ export const ErrorContext = createContext<ErrorContextType | undefined>(
 function App() {
 	const [error, setError] = useState(false);
 	return (
-		<ErrorContext.Provider value={{ error, setError }}>
+		<ErrorContext value={{ error, setError }}>
 			<ErrorDialog />
 			<BrowserRouter>
 				<Routes>
@@ -29,7 +29,7 @@ function App() {
 					/>
 				</Routes>
 			</BrowserRouter>
-		</ErrorContext.Provider>
+		</ErrorContext>
 	);
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { Header } from "@/components/Header";
 import { Board } from "@/components/Board";
 import { env } from "@/config";
@@ -7,6 +7,8 @@ import { BoardType } from "@/interfaces/board.model";
 import { useParams } from "react-router-dom";
 import { NotFound } from "./NotFound";
 import { Loader } from "@/components/Loader";
+
+export const BoardContext = createContext(() => {});
 
 export function BoardView() {
 	const { setError } = useError();
@@ -45,11 +47,13 @@ export function BoardView() {
 		);
 
 	return (
-		<div className="flex min-h-screen flex-col">
-			<Header />
-			<main className="flex-1 overflow-auto p-4 md:p-6">
-				{board && <Board columns={board.columns} title={board.title} />}
-			</main>
-		</div>
+		<BoardContext value={getData}>
+			<div className="flex min-h-screen flex-col">
+				<Header />
+				<main className="flex-1 overflow-auto p-4 md:p-6">
+					{board && <Board columns={board.columns} title={board.title} />}
+				</main>
+			</div>
+		</BoardContext>
 	);
 }

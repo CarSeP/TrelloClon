@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { env } from "@/config";
 import { useError } from "@/customhooks/useError";
+import { BoardContext } from "@/pages/BoardView";
+import { useContext } from "react";
 import { useParams } from "react-router-dom";
 
 interface Props {
@@ -20,6 +22,8 @@ interface Props {
 export function AddColumnDialog({ open, onClose }: Props) {
 	const { id } = useParams();
 	const { setError } = useError();
+
+	const useBoard = useContext(BoardContext);
 
 	const handleSubmit = async (e: any) => {
 		e.preventDefault();
@@ -42,6 +46,7 @@ export function AddColumnDialog({ open, onClose }: Props) {
 			setError(true);
 		}
 
+		useBoard();
 		onClose();
 	};
 

@@ -15,6 +15,7 @@ import Sortable from "sortablejs";
 import { useBoardStore } from "@/store/boardStore";
 import { DeleteColumnDialog } from "./DeleteColumnDialog";
 import { useParams } from "react-router-dom";
+import { EditColumnDialog } from "./EditColumnDialog";
 
 interface Props {
 	column: ColumnType;
@@ -32,6 +33,10 @@ export function Column({ column, index }: Props) {
 	const cardRef = useRef(null);
 	const { moveCard } = useBoardStore((state) => state);
 	const { id } = useParams();
+
+	const closeDialog = () => {
+		setOpenDialog(null);
+	};
 
 	useEffect(() => {
 		if (!cardRef.current) return;
@@ -60,12 +65,17 @@ export function Column({ column, index }: Props) {
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							<DropdownMenuItem>Rename</DropdownMenuItem>
+							<DropdownMenuItem
+								onClick={() => {
+									setOpenDialog(Dialog.editBoard);
+								}}
+							>
+								Edit
+							</DropdownMenuItem>
 							<DropdownMenuItem
 								onClick={() => {
 									setOpenDialog(Dialog.deleteBoard);
 								}}
-								className="text-destructive"
 							>
 								Delete
 							</DropdownMenuItem>
@@ -93,11 +103,17 @@ export function Column({ column, index }: Props) {
 			<AddCardDialog
 				columnId={column.id}
 				open={openDialog === Dialog.addCard}
-				onClose={() => setOpenDialog(null)}
+				onClose={closeDialog}
 			/>
 			<DeleteColumnDialog
 				open={openDialog === Dialog.deleteBoard}
-				onClose={() => setOpenDialog(null)}
+				onClose={closeDialog}
+				id={id || ""}
+				columnID={column.id}
+			/>
+			<EditColumnDialog
+				open={openDialog === Dialog.editBoard}
+				onClose={closeDialog}
 				id={id || ""}
 				columnID={column.id}
 			/>
